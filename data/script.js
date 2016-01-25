@@ -7,8 +7,11 @@ window.addEventListener('click', function (event) {
   }
 }, false);
 
+self.port.on('clean', function () {
+  menu.innerHTML = "";
+});
+
 self.port.on('episode', function (data) {
-  //console.log(data);
   var newMenuItem = document.createElement('div');
   var newContent = document.createTextNode(data.title);
   newMenuItem.appendChild(newContent);

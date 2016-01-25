@@ -11,7 +11,7 @@ var panels = require("sdk/panel");
 var self = require("sdk/self");
 var request = require("sdk/request").Request;
 var ss = require("sdk/simple-storage");
-var {Cc, Ci} = require("chrome");
+//var {Cc, Ci} = require("chrome");
 //var parser = Cc["@mozilla.org/xmlextras/domparser;1"].createInstance(Ci.nsIDOMParser);
 
 // extension button
@@ -28,13 +28,13 @@ var button = buttons.ToggleButton({
   onClick: handleClick
 });
 
-var fetchAndProcess = function (link, newPanel) {
+var fetchAndProcess = function (link, panel) {
   request({
     url: link.url,
     onComplete: function (response) {
       //console.log(link.title + " = " + String(response.status));
       link.responseCode = response.status;
-      newPanel.port.emit('episode', link);
+      panel.port.emit('episode', link);
     }
   }).get();
 };
@@ -70,14 +70,20 @@ function initPanel() {
   return newPanel;
 }
 
+/**
+ * Fill the panel with series stored in simple-storage.
+ */
 function fillPanel() {
+  // clean the panel
+  panel.port.emit('clean');
+  
   for (var i of ss.storage.series) {
     fetchAndProcess(i, panel);
   }
 }
 
 /**
- * Function for initializing database.
+ * Initialize simple-storage database.
  */
 function initDatabase() {
   if (!ss.storage.series) {
@@ -108,21 +114,17 @@ function handleClick(state) {
   }
 }
 
-var notifUser = function (link) {
-  console.log(link.title);
-  notifications.notify({
-    title: link.title,
-    text: link.url,
-    data: link.url,
-    onClick: function (data) {
-      tabs.open(data);
-    }
-  });
-
-
-
+//var notifUser = function (link) {
+//  console.log(link.title);
+//  notifications.notify({
+//    title: link.title,
+//    text: link.url,
+//    data: link.url,
+//    onClick: function (data) {
+//      tabs.open(data);
+//    }
+//  });
+//};
 //var dom = parser.parseFromString(panelContent, "text/html");
 //dom.getElementById("menu").innerHTML = 
 //    "<div class=\"menu-item\">" + ss.storage.series[0].title + "</div>";
-
-};
