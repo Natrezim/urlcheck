@@ -1,0 +1,32 @@
+.menu {
+    
+}
+
+.menu-item {
+    /*display: block;*/
+    font-family: 'Arial', sans-serif;
+    font-size: 12px;
+    color: #000;
+    background-color: #d8ecfb;
+    /*text-align: center;*/
+    padding: 8px 6px;
+    margin: 2px 2px;
+
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    
+    /*-webkit-border-radius: 2px;*/
+    /*-khtml-border-radius: 2px;*/
+    /*-moz-border-radius: 2px;*/
+    /*border-radius: 2px;*/
+}
+
+.menu-item:hover {
+    background-color: #bfdbfa;
+}
+
+.menu-item:active {
+    vertical-align: top;
+    padding: 9px 6px 7px;
+}
