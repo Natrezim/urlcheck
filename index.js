@@ -28,11 +28,14 @@ var button = buttons.ToggleButton({
   onClick: handleClick
 });
 
-var fetchAndProcess = function (link, panel) {
+var fetchAndProcess = function (link, panel, button) {
   request({
     url: link.url,
     onComplete: function (response) {
-      //console.log(link.title + " = " + String(response.status));
+      if (response.status == 200) {
+        button.badge == "" ? button.badge = 1 : button.badge++;
+      }
+      
       link.responseCode = response.status;
       panel.port.emit('episode', link);
     }
@@ -61,10 +64,9 @@ function initPanel() {
     button.state('window', {checked: false});
   }
   
-  // panel listener for 'click-link' event
-  newPanel.port.on("click-link", function (elementContent) {
-    console.log(elementContent);
-    button.badge == "" ? button.badge = 1 : button.badge++;
+  // panel listener for 'click-link' event and open new tab.
+  newPanel.port.on("click-link", function (url) {
+    tabs.open(url);
   });
   
   return newPanel;
@@ -78,7 +80,7 @@ function fillPanel() {
   panel.port.emit('clean');
   
   for (var i of ss.storage.series) {
-    fetchAndProcess(i, panel);
+    fetchAndProcess(i, panel, button);
   }
 }
 
